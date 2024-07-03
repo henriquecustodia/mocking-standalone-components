@@ -1,29 +1,30 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { FakeCustomComponent } from '../__mocks__/custom.component.mock';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AppComponent],
-    }).compileComponents();
-  });
+  it('deve renderizar CustomComponent', () => {
+    TestBed.overrideComponent(AppComponent, {
+      set: {
+        imports: [FakeCustomComponent],
+      },
+    });
 
-  it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
 
-  it(`should have the 'mocking-standalone-components' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('mocking-standalone-components');
-  });
+    const customComponentElement = fixture.debugElement.query(By.css('app-custom'));
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, mocking-standalone-components');
+    expect(customComponentElement)
+      .withContext('deve renderizar Custom Componente')
+      .toBeTruthy();
+
+    // // faz um Deep Testing quando CustomComponent quando não é feito o mock do componente  
+    // const text = customComponentElement.query(By.css('p')).nativeElement.textContent;
+    
+    // expect(text)
+    //   .withContext('deve renderizar o texto custom de custom component')
+    //   .toBe('custom works!');
   });
 });
